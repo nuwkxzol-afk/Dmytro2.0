@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dmytro | Panda</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: black;
+    color: white;
+    overflow-x: hidden;
+}
+
+.bg {
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, #00ffee, transparent 40%),
+                radial-gradient(circle, #ff00cc, transparent 40%);
+    z-index: -1;
+    transition: 0.2s;
+}
+
+header {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.profile-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00ffee;
+    animation: pulse 2s infinite;
+    cursor: pointer;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px #00ffee; }
+    50% { box-shadow: 0 0 40px #ff00cc; }
+    100% { box-shadow: 0 0 20px #00ffee; }
+}
+
+h1 {
+    font-size: 50px;
+    background: linear-gradient(90deg, #00ffee, #ff00cc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    margin-top: 10px;
+    background: linear-gradient(90deg, #ff00cc, #00ffee);
+    border-radius: 30px;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+.music-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #111;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* glitch */
+@keyframes glitch {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(5px,-5px); }
+    50% { transform: translate(-5px,5px); }
+    75% { transform: translate(5px,5px); }
+    100% { transform: translate(0,0); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg" id="bg"></div>
+
+<header>
+    <!-- ВОТ ТУТ Я ИСПРАВИЛ -->
+    <img src="photo.png" class="profile-img" onclick="startPrank()">
+
+    <h1>Dmytro "Panda"</h1>
+    <p>Начинающий геймер и будущий программист</p>
+
+    <a href="https://instagram.com/panda_310110" target="_blank" class="btn">
+        Написать в Instagram
+    </a>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>О нём</h2>
+        <p>Дмитро — 16-летний парень из Украины, живущий в Бельгии. 
+Он малоизвестный, но начинающий геймер.
+
+Он очень застенчивый, но при этом добрый и искренний человек. 
+В интернете его знают как Panda или просто Дима.
+
+Он часто играет в Roblox, пробует себя в программировании 
+и любит читать фэнтези-книги. Также он очень любит суши.
+
+Дмитро — нежный и хрупкий человек с большим потенциалом. 
+Он отличается своей природной красотой, хотя сам этого не понимает.
+
+Сейчас он открыт к новым знакомствам и ищет добрую, 
+понимающую девушку.</p>
+    </div>
+</div>
+
+<div id="loadingScreen" style="
+display:none; position:fixed; width:100%; height:100%;
+background:black; color:white; justify-content:center;
+align-items:center; font-size:24px; z-index:999;">
+Загрузка профиля...
+</div>
+
+<div id="glitchScreen" style="
+display:none; position:fixed; width:100%; height:100%;
+background:black; justify-content:center; align-items:center;
+flex-direction:column; z-index:1000;">
+<img src="glitch.jpg" style="max-width:90%; animation:glitch 0.2s infinite;">
+<p>⚠ SYSTEM ERROR</p>
+</div>
+
+<audio id="music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="glitchSound">
+    <source src="glitch.mp3" type="audio/mpeg">
+</audio>
+
+<div class="music-btn" onclick="toggleMusic()">🎵 Музыка</div>
+
+<script>
+document.addEventListener("mousemove", e => {
+    document.getElementById("bg").style.transform =
+        `translate(${e.clientX/20}px, ${e.clientY/20}px)`
+});
+
+let music = document.getElementById("music");
+let playing = false;
+
+function fadeIn(audio) {
+    audio.volume = 0;
+    audio.play();
+    let vol = 0;
+    let interval = setInterval(() => {
+        if (vol < 1) {
+            vol += 0.05;
+            audio.volume = vol;
+        } else clearInterval(interval);
+    }, 100);
+}
+
+document.addEventListener("click", () => {
+    if (!playing) {
+        fadeIn(music);
+        playing = true;
+    }
+}, { once: true });
+
+function toggleMusic() {
+    if (!playing) {
+        fadeIn(music);
+        playing = true;
+    } else {
+        music.pause();
+        playing = false;
+    }
+}
+
+function startPrank() {
+    let load = document.getElementById("loadingScreen");
+    let glitch = document.getElementById("glitchScreen");
+    let sound = document.getElementById("glitchSound");
+
+    load.style.display = "flex";
+
+    setTimeout(() => {
+        load.style.display = "none";
+        glitch.style.display = "flex";
+        sound.play();
+    }, 1500);
+}
+
+document.getElementById("glitchScreen").onclick = function() {
+    this.style.display = "none";
+}
+</script>
+
+</body>
+</html>
